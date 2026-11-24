@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>T38 Fit to Print — the whole photo on a 10 × 15 sheet</title>
+<link rel="stylesheet" href="_shared/nocturne.css">
+<link rel="stylesheet" href="../style.css">
+<style>
+  /* the whole app screen from ../, in Nocturne type; no grid on the app screen */
+  #stage{background:#07080C}
+  #stage .vp{position:absolute;left:0;top:0;--font:var(--f-text)}
+  body.autoplay #stage :focus-visible{outline:none}
+  body.autoplay #li-cursor{transition:none}   /* visible from frame one, no fade at the loop seam */
+  #li-cursor svg{transform:scale(1.5);transform-origin:4px 3px}   /* the hand stays readable in a phone-sized reel */
+  #li-cursor.down svg{transform:scale(1.3)}
+</style>
+</head>
+<body>
+<div id="stage" data-title="T38 Fit to Print" data-url="veraetogrex-portfolio.github.io/fit-to-print">
+  <section class="vp" aria-label="VECTOR Prints" data-assets="../assets/"></section>
+</div>
+<script src="_shared/stage.js"></script>
+<script src="../script.js"></script>
+<script>
+const app = document.querySelector('.vp').printsApp;
+const at = sel => { const r = Stage.rect(document.querySelector(sel)); return [r.cx, r.cy]; };
+const REST = [1010, 610];
+// one act: home → print settings, the ears run past the sheet → "Whole photo", the ears land on the paper
+Stage.init({
+  reset: () => app.reset(),
+  cursorStart: REST,
+  async demo(s) {
+    const t0 = performance.now();
+    await s.until(t0, 1100);                          // the whole home screen at rest first
+    await s.move(at('[data-print]'), 600);            // Print on "Biscuit in the park"
+    await s.until(t0, 2000);
+    await s.click(null, { hold: 110 });               // → print settings, Fill the paper: the ears are over the cut line
+    await s.until(t0, 3000);
+    await s.move(at('.vp-fit[data-fit="whole"] input'), 550);   // on the radio, so the hand does not cover the label
+    await s.until(t0, 3800);
+    await s.click(null, { hold: 120 });               // Whole photo: the photo shrinks inside the same sheet, 0.8 s
+    await s.until(t0, 6100);                          // the ears on paper, white borders: the camera holds the sheet, its caption and the order button 1.5 s
+    const [ax, ay] = at('[data-add]');
+    await s.move([ax + 118, ay + 8], 500);             // the right end of the button: the hand stays off "Added to order"
+    await s.until(t0, 6700);
+    await s.click(null, { hold: 120 });               // Add to order: "Added to order", the cart counts 3 → 4 — the reel ends here (owner 24.11: «концовка плохая»)
+    await s.until(t0, 8400);
+  },
+});
+</script>
+</body>
+</html>
