@@ -44,7 +44,7 @@ Stage.init({
     const [ax, ay] = at('[data-add]');
     await s.move([ax + 118, ay + 8], 500);             // the right end of the button: the hand stays off "Added to order"
     await s.until(t0, 6700);
-    await s.click(null, { hold: 120 });               // Add to order: "Added to order", the cart counts 3 → 4 — the reel ends here (owner 24.11: «концовка плохая»)
+    await s.click(null, { hold: 120 });               // Add to order: "Added to order", the cart counts 3 → 4 — the reel ends here (owner 24.11: "the ending is bad")
     await s.until(t0, 8400);
   },
 });
